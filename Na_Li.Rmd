@@ -1,5 +1,5 @@
 ---
-title: "Li_Na"
+title: "DSO 545 Take Home Final"
 author: "Na Li"
 date: "December 3, 2017"
 output: pdf_document
@@ -19,7 +19,7 @@ icecream<-read.csv("icecream.csv")
 aggreg<-icecream %>%
   group_by(Country.or.Area) %>%
   summarize(spending=mean(USDinMillions))
-aggreg
+head(aggreg)
 ```
 
 ###2. Create a chloropleth map that shows the average spending on icecream for the listed countiresover the given years.
@@ -38,7 +38,7 @@ icecream_world<-mutate(icecream_world, spending=ifelse(is.na(spending), 0,spendi
 ggplot(icecream_world, aes(x=long, y=lat, group=group, fill=spending))+
   geom_polygon(color="black")+
   scale_fill_gradient(low="white", high="red", name="Million USD")+
-  labs(title="Average Spending on Icecream for 1995-2012. \n(No data available for white area", x="", y="")+
+  labs(title="Average Spending on Icecream for 1995-2012. \n   (No data available for white area)", x="", y="")+
   theme_void()
 ```
 
@@ -62,7 +62,7 @@ players<-page %>%
 library(stringr)
 ##use str_replace_all to remove $ and comma in the string and convert the variable
 ##into a numeric one
-players<-players %>% mutate(compensation=as.numeric(
+players<-players %>% mutate(Compensation=as.numeric(
   str_replace_all(`2017 Guaranteed compensation[14]`, 
                   pattern="\\$|,", 
                  replacement="")))
@@ -72,20 +72,20 @@ players<-players %>% mutate(compensation=as.numeric(
 
 ```{r}
 ##change the colunm names of players dataset
-colnames(players)=c("year", "player", "nation", "club", "compensationText", "compensation")
+colnames(players)=c("year", "player", "nation", "club", "compensationText", "Compensation")
 
 ##get the rows of players belonging to "New York City FC" and "LA Galaxy"
 NYLAplayers<-players %>%
   filter(club%in% c("New York City FC", "LA Galaxy")) %>%
-  select(c("year", "player", "club", "compensation")) %>%
-  arrange(desc(compensation))
+  select(c("year", "player", "club", "Compensation")) %>%
+  arrange(desc(Compensation))
 ```
 
 ###4. Visualize the NYLAplayers compensation
 
 ```{r}
 library(ggplot2)
-ggplot(NYLAplayers, aes(x=compensation, y=reorder(player, compensation)))+
+ggplot(NYLAplayers, aes(x=Compensation, y=reorder(player, Compensation)))+
   geom_point()+
   ###the following code change the break labels
   scale_x_continuous(breaks=c(2e6, 3e6, 4e6, 5e6),labels=c("2", "3", "4", "5"))+
